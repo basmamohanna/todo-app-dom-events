@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load tasks from localStorage when the app starts
     loadTasks();
+
+    function getTasksFromStorage() {
+        return JSON.parse(localStorage.getItem('tasks')) || [];           
+    }
     
     // Add task when button is clicked or Enter is pressed
     addTaskBtn.addEventListener('click', addTask);
@@ -78,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function saveTaskToStorage(taskText, isCompleted, taskId) {
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let tasks = getTasksFromStorage();
         tasks.push({ 
             id: taskId, 
             text: taskText, 
@@ -88,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function loadTasks() {
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let tasks = getTasksFromStorage();
         tasks.forEach(task => {
             createTaskElement(task.text, task.completed, task.id);
         });
@@ -97,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateTaskStatus(taskItem, isCompleted) {
         const taskId = taskItem.dataset.taskId;
         
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let tasks = getTasksFromStorage();
         tasks = tasks.map(task => {
             if (task.id === taskId) {
                 return { ...task, completed: isCompleted };
@@ -109,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function removeTaskFromStorage(taskId) {
-        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let tasks = getTasksFromStorage();
         tasks = tasks.filter(task => task.id !== taskId);
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
